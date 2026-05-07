@@ -33,7 +33,7 @@ export function BookingFlow() {
     const loadingToast = toast.loading("Đang gửi yêu cầu...");
 
     try {
-      const response = await fetch("http://localhost:5000/api/booking/register", {
+      const response = await fetch("https://tarotbooking.onrender.com/api/booking/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
