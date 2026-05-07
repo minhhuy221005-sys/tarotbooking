@@ -35,3 +35,5 @@ logs/
 # Misc
 .vercel
 .netlify
+extracted_pdf.txt
+setup_instructions.md
