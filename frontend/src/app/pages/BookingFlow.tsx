@@ -94,7 +94,7 @@ export function BookingFlow() {
             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
               <Sparkles className="w-4 h-4" />
             </div>
-            <span className="font-serif font-semibold text-lg tracking-wide text-primary">ChyTarot</span>
+            <span className="font-serif font-semibold text-lg tracking-wide text-primary">WonderLand</span>
           </div>
           {step > 1 && step < 3 && (
             <button 

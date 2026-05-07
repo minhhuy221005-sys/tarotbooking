@@ -47,7 +47,7 @@ const sendBookingAlert = async (data) => {
             
             <!-- Header -->
             <div style="background: linear-gradient(135deg, #1a0b2e 0%, #3b2166 100%); padding: 30px; text-align: center; border-bottom: 1px solid #d4af37;">
-              <h1 style="color: #d4af37; margin: 0; font-size: 24px; letter-spacing: 2px; text-transform: uppercase;">ChyTarot Booking</h1>
+              <h1 style="color: #d4af37; margin: 0; font-size: 24px; letter-spacing: 2px; text-transform: uppercase;">WonderLand Booking</h1>
               <p style="color: #a78bfa; margin: 10px 0 0 0; font-style: italic;">Yêu cầu mới từ vũ trụ</p>
             </div>
 
