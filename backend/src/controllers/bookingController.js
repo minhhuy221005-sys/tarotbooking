@@ -11,7 +11,7 @@ const createBooking = async (req, res) => {
     }
 
     const bookingData = {
-      timestamp: new Date().toLocaleString('vi-VN'),
+      timestamp: new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }),
       packageName,
       fullName,
       dob,
