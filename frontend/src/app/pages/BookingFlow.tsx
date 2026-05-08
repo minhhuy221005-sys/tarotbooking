@@ -19,7 +19,7 @@ export function BookingFlow() {
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("tarot");
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>();
 
   const handleSelectPackage = (pkg: Package) => {
     setSelectedPackage(pkg);
@@ -244,6 +244,7 @@ export function BookingFlow() {
                     </label>
                     <input
                       {...register("fullName", { required: "Vui lòng nhập họ tên" })}
+                      disabled={isSubmitting}
                       className="w-full bg-input-background border border-border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                       placeholder="Nhập tên của bạn"
                     />
@@ -258,6 +259,7 @@ export function BookingFlow() {
                     <input
                       {...register("dob", { required: "Vui lòng nhập ngày sinh" })}
                       type="date"
+                      disabled={isSubmitting}
                       className="w-full bg-input-background border border-border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                     />
                     {errors.dob && <p className="text-destructive text-sm mt-1">{errors.dob.message}</p>}
@@ -270,6 +272,7 @@ export function BookingFlow() {
                     </label>
                     <input
                       {...register("contact", { required: "Vui lòng nhập phương thức liên lạc" })}
+                      disabled={isSubmitting}
                       className="w-full bg-input-background border border-border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                       placeholder="Để lại link Facebook hoặc số Zalo"
                     />
@@ -284,6 +287,7 @@ export function BookingFlow() {
                     <input
                       {...register("preferredTime", { required: "Vui lòng chọn thời gian" })}
                       type="datetime-local"
+                      disabled={isSubmitting}
                       className="w-full bg-input-background border border-border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                     />
                     {errors.preferredTime && <p className="text-destructive text-sm mt-1">{errors.preferredTime.message}</p>}
@@ -292,9 +296,12 @@ export function BookingFlow() {
 
                 <button
                   type="submit"
-                  className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-medium hover:bg-primary/90 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
+                  disabled={isSubmitting}
+                  className={`w-full bg-primary text-primary-foreground py-4 rounded-xl font-medium transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20 ${
+                    isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-primary/90'
+                  }`}
                 >
-                  Xác nhận đặt lịch
+                  {isSubmitting ? 'Đang gửi...' : 'Xác nhận đặt lịch'}
                   <Sparkles className="w-4 h-4" />
                 </button>
               </form>

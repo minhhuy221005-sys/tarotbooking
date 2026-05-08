@@ -17,13 +17,32 @@ const formatVN = (dateStr) => {
 const formatDateTimeVN = (dateTimeStr) => {
   if (!dateTimeStr) return 'Chưa cung cấp';
   try {
-    const date = new Date(dateTimeStr);
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${hours}:${minutes} ngày ${day}/${month}/${year}`;
+    // Frontend uses <input type="datetime-local"> which sends a timezone-less string:
+    // "YYYY-MM-DDTHH:mm". Treat it as Vietnam local time (+07:00) to avoid server TZ drift.
+    const asText = String(dateTimeStr);
+    const vnLocalNoSeconds = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
+    const date = vnLocalNoSeconds.test(asText)
+      ? new Date(`${asText}:00+07:00`)
+      : new Date(asText);
+
+    const parts = new Intl.DateTimeFormat('vi-VN', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+      hour: '2-digit',
+      minute: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour12: false,
+    }).formatToParts(date);
+
+    const get = (type) => parts.find((p) => p.type === type)?.value;
+    const hh = get('hour');
+    const mm = get('minute');
+    const dd = get('day');
+    const mo = get('month');
+    const yyyy = get('year');
+    if (hh && mm && dd && mo && yyyy) return `${hh}:${mm} ngày ${dd}/${mo}/${yyyy}`;
+    return new Date(date.getTime()).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
   } catch (e) {
     return dateTimeStr;
   }

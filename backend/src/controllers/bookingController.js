@@ -15,11 +15,14 @@ const createBooking = asyncHandler(async (req, res) => {
     status: 'Mới'
   };
 
-  // Write to Sheets & Send Email in parallel
-  await Promise.all([
-    appendBooking(bookingData),
-    sendBookingAlert(bookingData)
-  ]);
+  // Source of truth: if Sheets write succeeds, booking is accepted.
+  // Email is a notification channel; if it fails, we still keep the booking.
+  await appendBooking(bookingData);
+  try {
+    await sendBookingAlert(bookingData);
+  } catch (err) {
+    console.error('sendBookingAlert failed (booking still saved):', err?.message || err);
+  }
 
   res.status(200).json({ 
     message: 'Đăng ký thành công! Reader sẽ sớm liên hệ với bạn qua Facebook/Zalo.' 
