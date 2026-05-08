@@ -32,4 +32,7 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Endpoint không tồn tại.' });
 });
 
+// Global Error Handler (Must be last)
+app.use(require('./middlewares/error.middleware'));
+
 module.exports = app;
