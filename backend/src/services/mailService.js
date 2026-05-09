@@ -7,8 +7,24 @@ const resend = new Resend(process.env.RESEND_API_KEY);
  */
 const formatVN = (dateStr) => {
   if (!dateStr) return 'Chưa cung cấp';
-  const [y, m, d] = dateStr.split('-');
-  return `${d}/${m}/${y}`;
+  try {
+    // Joi may coerce ISO strings into Date objects
+    if (dateStr instanceof Date) {
+      return new Intl.DateTimeFormat('vi-VN', {
+        timeZone: 'Asia/Ho_Chi_Minh',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      }).format(dateStr);
+    }
+
+    const asText = String(dateStr);
+    const [y, m, d] = asText.split('-');
+    if (y && m && d) return `${d}/${m}/${y}`;
+    return asText;
+  } catch {
+    return String(dateStr);
+  }
 };
 
 /**
@@ -17,6 +33,18 @@ const formatVN = (dateStr) => {
 const formatDateTimeVN = (dateTimeStr) => {
   if (!dateTimeStr) return 'Chưa cung cấp';
   try {
+    if (dateTimeStr instanceof Date) {
+      return new Intl.DateTimeFormat('vi-VN', {
+        timeZone: 'Asia/Ho_Chi_Minh',
+        hour: '2-digit',
+        minute: '2-digit',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour12: false,
+      }).format(dateTimeStr).replace(',', '');
+    }
+
     // Frontend uses <input type="datetime-local"> which sends a timezone-less string:
     // "YYYY-MM-DDTHH:mm". Treat it as Vietnam local time (+07:00) to avoid server TZ drift.
     const asText = String(dateTimeStr);
