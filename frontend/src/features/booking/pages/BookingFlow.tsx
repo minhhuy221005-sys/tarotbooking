@@ -351,13 +351,13 @@ export function BookingFlow() {
           </p>
 
           {/* Right: mascot + FB button */}
-          <div className="flex flex-row items-end gap-3 order-1 sm:order-2">
+          <div className="flex flex-row items-center gap-2 order-1 sm:order-2">
             <motion.img
               src={mascotImage}
               alt="Mèo chỉ vào nút Facebook"
-              className="pointer-events-none w-36 sm:w-40 select-none drop-shadow-[0_6px_16px_rgba(74,55,40,0.18)]"
+              className="pointer-events-none w-56 sm:w-64 select-none drop-shadow-[0_6px_16px_rgba(74,55,40,0.18)]"
               animate={{
-                y: [0, -4, 0],
+                y: [0, -5, 0],
                 rotate: [-1.5, 0.8, -1.5],
               }}
               transition={{
@@ -370,7 +370,7 @@ export function BookingFlow() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Mở Facebook cá nhân"
-              className="mb-3 flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#1877f2] text-white shadow-lg shadow-[#1877f2]/30 ring-4 ring-white/80 hover:bg-[#0f6bdf] transition-colors"
+              className="flex flex-col items-center justify-center gap-1 h-16 w-16 shrink-0 rounded-2xl bg-[#1877f2] text-white shadow-lg shadow-[#1877f2]/30 hover:bg-[#0f6bdf] active:scale-95 transition-all"
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
             >
