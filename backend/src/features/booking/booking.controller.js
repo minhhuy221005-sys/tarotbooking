@@ -1,6 +1,6 @@
-const { appendBooking } = require('../services/sheetService');
-const { sendBookingAlert } = require('../services/mailService');
-const asyncHandler = require('../utils/asyncHandler');
+const { appendBooking } = require('./booking.sheetService');
+const { sendBookingAlert } = require('./booking.mailService');
+const asyncHandler = require('../../utils/asyncHandler');
 
 const createBooking = asyncHandler(async (req, res) => {
   const { packageName, fullName, dob, contactLink, preferredTime } = req.body;
@@ -24,8 +24,8 @@ const createBooking = asyncHandler(async (req, res) => {
     console.error('sendBookingAlert failed (booking still saved):', err?.message || err);
   }
 
-  res.status(200).json({ 
-    message: 'Đăng ký thành công! Reader sẽ sớm liên hệ với bạn qua Facebook/Zalo.' 
+  res.status(200).json({
+    message: 'Đăng ký thành công! Reader sẽ sớm liên hệ với bạn qua Facebook/Zalo.'
   });
 });
 

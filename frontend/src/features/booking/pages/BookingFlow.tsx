@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Sparkles, MoonStar, Compass, ArrowRight, CheckCircle2, ChevronLeft, Calendar, User, MessageCircle, Clock } from 'lucide-react';
-import { categories, Package } from '../data/services';
+import { categories } from '../data/services';
+import type { Package } from '../data/services';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
-import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { ImageWithFallback } from '../../../app/components/figma/ImageWithFallback';
 
 type FormData = {
   fullName: string;

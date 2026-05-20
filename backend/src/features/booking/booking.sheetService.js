@@ -1,5 +1,6 @@
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const { getAuthToken } = require('../config/googleSheets');
+const { getAuthToken } = require('../../config/googleSheets');
+const { safeSheetCell } = require('./booking.security');
 
 const formatDobForSheet = (value) => {
   if (!value) return '';
@@ -65,17 +66,17 @@ const appendBooking = async (data) => {
 
   const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID, auth);
   await doc.loadInfo();
-  
+
   const sheet = doc.sheetsByIndex[0];
   await sheet.addRow({
-    'Thời gian gửi': data.timestamp,
-    'Gói Tarot': data.packageName,
-    'Họ và tên': data.fullName,
-    'Ngày sinh': formatDobForSheet(data.dob),
-    'Link Facebook': data.contactLink,
-    'Thời gian muốn xem': formatPreferredTimeForSheet(data.preferredTime),
-    'Trạng thái': data.status || 'Mới',
-    'Ghi chú': data.note || ''
+    'Thời gian gửi': safeSheetCell(data.timestamp),
+    'Gói Tarot': safeSheetCell(data.packageName),
+    'Họ và tên': safeSheetCell(data.fullName),
+    'Ngày sinh': safeSheetCell(formatDobForSheet(data.dob)),
+    'Link Facebook': safeSheetCell(data.contactLink),
+    'Thời gian muốn xem': safeSheetCell(formatPreferredTimeForSheet(data.preferredTime)),
+    'Trạng thái': safeSheetCell(data.status || 'Mới'),
+    'Ghi chú': safeSheetCell(data.note || '')
   });
 };
 

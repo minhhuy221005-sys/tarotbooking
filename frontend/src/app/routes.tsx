@@ -1,5 +1,5 @@
-import { createBrowserRouter, Outlet } from "react-router";
-import { BookingFlow } from "./pages/BookingFlow";
+import { createBrowserRouter } from "react-router";
+import { BookingFlow } from "../features/booking/pages/BookingFlow";
 
 export const router = createBrowserRouter([
   {
