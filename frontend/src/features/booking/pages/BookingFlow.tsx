@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
 import { ImageWithFallback } from '../../../app/components/figma/ImageWithFallback';
+import { FacebookFloatButton } from '../components/FacebookFloatButton';
 
 type FormData = {
   fullName: string;
@@ -340,6 +341,8 @@ export function BookingFlow() {
           )}
         </AnimatePresence>
       </main>
+
+      <FacebookFloatButton />
     </div>
   );
 }
