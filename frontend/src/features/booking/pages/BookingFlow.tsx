@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
 import { ImageWithFallback } from '../../../app/components/figma/ImageWithFallback';
-import { FacebookFloatButton } from '../components/FacebookFloatButton';
+import mascotImage from '../assets/facebook-mascot.png';
 
 type FormData = {
   fullName: string;
@@ -111,7 +111,7 @@ export function BookingFlow() {
       </header>
 
       {/* Main Content */}
-      <main className="pt-24 pb-20 px-4 max-w-4xl mx-auto">
+      <main className="pt-24 pb-8 px-4 max-w-4xl mx-auto">
         <AnimatePresence mode="wait">
           {/* STEP 1: Select Package */}
           {step === 1 && (
@@ -342,7 +342,43 @@ export function BookingFlow() {
         </AnimatePresence>
       </main>
 
-      <FacebookFloatButton />
+      {/* Footer with mascot + Facebook button */}
+      <footer className="w-full border-t border-border bg-background/80 backdrop-blur-sm">
+        <div className="max-w-4xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+          {/* Left: copyright */}
+          <p className="text-sm text-muted-foreground text-center sm:text-left order-2 sm:order-1">
+            © 2026 WonderLand · Góc nhỏ của sự chữa lành
+          </p>
+
+          {/* Right: mascot + FB button */}
+          <div className="flex flex-row items-end gap-3 order-1 sm:order-2">
+            <motion.img
+              src={mascotImage}
+              alt="Mèo chỉ vào nút Facebook"
+              className="pointer-events-none w-36 sm:w-40 select-none drop-shadow-[0_6px_16px_rgba(74,55,40,0.18)]"
+              animate={{
+                y: [0, -4, 0],
+                rotate: [-1.5, 0.8, -1.5],
+              }}
+              transition={{
+                y: { duration: 2.4, repeat: Infinity, ease: 'easeInOut' },
+                rotate: { duration: 3, repeat: Infinity, ease: 'easeInOut' },
+              }}
+            />
+            <motion.a
+              href="https://www.facebook.com/bui.que.chy"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Mở Facebook cá nhân"
+              className="mb-3 flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#1877f2] text-white shadow-lg shadow-[#1877f2]/30 ring-4 ring-white/80 hover:bg-[#0f6bdf] transition-colors"
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <span className="font-sans text-3xl font-bold leading-none" aria-hidden="true">f</span>
+            </motion.a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
