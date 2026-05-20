@@ -13,19 +13,19 @@ export function FacebookFloatButton() {
       <motion.img
         src={mascotImage}
         alt="Mèo nhỏ chỉ vào nút Facebook"
-        className="pointer-events-none absolute bottom-9 right-6 w-[150px] max-w-[calc(100vw-5rem)] select-none drop-shadow-[0_12px_18px_rgba(74,55,40,0.16)] sm:bottom-8 sm:right-7 sm:w-[185px]"
-        initial={{ opacity: 0, y: 10, scale: 0.96, rotate: -2 }}
+        className="pointer-events-none absolute -bottom-1 right-[4.25rem] w-[5.75rem] max-w-[calc(100vw-5.5rem)] select-none drop-shadow-[0_8px_12px_rgba(74,55,40,0.14)] sm:right-[4.5rem] sm:w-[6.25rem]"
+        initial={{ opacity: 0, y: 6, scale: 0.96, rotate: -2 }}
         animate={{
           opacity: 1,
-          y: [0, -4, 0],
+          y: [0, -2, 0],
           scale: 1,
-          rotate: [-2, 0.8, -2],
+          rotate: [-1.5, 0.5, -1.5],
         }}
         transition={{
           opacity: { duration: 0.25 },
           scale: { duration: 0.25 },
-          y: { duration: 2.2, repeat: Infinity, ease: 'easeInOut' },
-          rotate: { duration: 2.8, repeat: Infinity, ease: 'easeInOut' },
+          y: { duration: 2.4, repeat: Infinity, ease: 'easeInOut' },
+          rotate: { duration: 3, repeat: Infinity, ease: 'easeInOut' },
         }}
       />
 
