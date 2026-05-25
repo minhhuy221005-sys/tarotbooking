@@ -80,4 +80,27 @@ const appendBooking = async (data) => {
   });
 };
 
-module.exports = { appendBooking };
+const getAdminBookings = async () => {
+  const auth = getAuthToken();
+  if (!auth) throw new Error('Google Sheets Auth failed');
+
+  const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID, auth);
+  await doc.loadInfo();
+
+  const sheet = doc.sheetsByIndex[0];
+  const rows = await sheet.getRows();
+
+  return rows.map((row) => ({
+    id: row.rowNumber, // Google Sheets row number as unique ID
+    timestamp: row.get('Thời gian gửi'),
+    packageName: row.get('Gói Tarot'),
+    fullName: row.get('Họ và tên'),
+    dob: row.get('Ngày sinh'),
+    contactLink: row.get('Link Facebook'),
+    preferredTime: row.get('Thời gian muốn xem'),
+    status: row.get('Trạng thái') || 'Mới',
+    note: row.get('Ghi chú') || ''
+  })).reverse(); // Reverse to show newest first
+};
+
+module.exports = { appendBooking, getAdminBookings };

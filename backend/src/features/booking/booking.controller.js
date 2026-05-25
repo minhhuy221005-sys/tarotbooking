@@ -1,4 +1,4 @@
-const { appendBooking } = require('./booking.sheetService');
+const { appendBooking, getAdminBookings: getSheetAdminBookings } = require('./booking.sheetService');
 const { sendBookingAlert } = require('./booking.mailService');
 const asyncHandler = require('../../utils/asyncHandler');
 
@@ -29,4 +29,12 @@ const createBooking = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { createBooking };
+const getAdminBookings = asyncHandler(async (req, res) => {
+  const bookings = await getSheetAdminBookings();
+  res.status(200).json({
+    message: 'Lấy dữ liệu thành công',
+    data: bookings
+  });
+});
+
+module.exports = { createBooking, getAdminBookings };

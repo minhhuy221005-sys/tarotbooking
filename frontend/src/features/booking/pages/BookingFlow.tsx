@@ -4,6 +4,7 @@ import { Sparkles, MoonStar, Compass, ArrowRight, CheckCircle2, ChevronLeft, Cal
 import { categories } from '../data/services';
 import type { Package } from '../data/services';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
 import { ImageWithFallback } from '../../../app/components/figma/ImageWithFallback';
@@ -20,6 +21,8 @@ export function BookingFlow() {
   const [step, setStep] = useState(1);
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("tarot");
+  const [logoClicks, setLogoClicks] = useState(0);
+  const navigate = useNavigate();
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>();
 
@@ -92,7 +95,17 @@ export function BookingFlow() {
       {/* Header */}
       <header className="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
         <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div 
+            className="flex items-center gap-2 cursor-pointer select-none"
+            onClick={() => {
+              const newClicks = logoClicks + 1;
+              setLogoClicks(newClicks);
+              if (newClicks >= 5) {
+                setLogoClicks(0);
+                navigate('/admin');
+              }
+            }}
+          >
             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
               <Sparkles className="w-4 h-4" />
             </div>
