@@ -118,7 +118,7 @@ export function AdminDashboard() {
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
               <Lock className="w-8 h-8" />
             </div>
-            <h2 className="text-2xl font-serif font-bold">Khu Vực Quản Trị</h2>
+            <h2 className="text-2xl font-serif font-bold">Khu vực admin</h2>
             <p className="text-muted-foreground text-sm mt-2">Nhập mật khẩu bí mật để xem danh sách khách hàng</p>
           </div>
 
