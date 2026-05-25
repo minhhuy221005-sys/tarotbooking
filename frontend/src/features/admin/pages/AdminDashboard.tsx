@@ -379,8 +379,9 @@ export function AdminDashboard() {
                       const nums = c.replace(/[\s\.\-\+]/g, '');
                       if (/^\d{9,12}$/.test(nums)) {
                         let f = nums;
-                        if (f.startsWith('0')) f = '84' + f.slice(1);
-                        return `https://zalo.me/${f}`;
+                        if (f.startsWith('84')) f = f.slice(2);
+                        else if (f.startsWith('0')) f = f.slice(1);
+                        return `https://zalo.me/84${f}`;
                       }
                       if (c.startsWith('http')) return c;
                       return `https://${c}`;
@@ -396,8 +397,9 @@ export function AdminDashboard() {
                         const nums = c.replace(/[\s\.\-\+]/g, '');
                         if (/^\d{9,12}$/.test(nums)) {
                           let f = nums;
-                          if (f.startsWith('0')) return '+84' + f.slice(1);
-                          return f;
+                          if (f.startsWith('84')) f = f.slice(2);
+                          else if (f.startsWith('0')) f = f.slice(1);
+                          return `+84 ${f}`;
                         }
                         return c;
                       })()}
