@@ -25,7 +25,7 @@ const bookingSchema = Joi.object({
     const looksLikeUrl = value.includes('.');
     
     if (looksLikeUrl && !isSafeDomain) {
-      return helpers.message('Vui lòng chỉ nhập SĐT hoặc link Facebook/Zalo an toàn. Link lạ đã bị từ chối.');
+      return helpers.message('Vui lòng chỉ nhập SĐT hoặc link Facebook/Zalo/Instagram an toàn. Link lạ đã bị từ chối.');
     }
     return value;
   }).messages({

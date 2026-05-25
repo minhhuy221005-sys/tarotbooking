@@ -283,7 +283,7 @@ export function BookingFlow() {
                   <div>
                     <label className="flex items-center gap-2 text-sm font-medium mb-2">
                       <MessageCircle className="w-4 h-4 text-primary" />
-                      Link Facebook / Zalo
+                      Link Facebook / Zalo / Instagram
                     </label>
                     <input
                       {...register("contact", { 
@@ -303,14 +303,14 @@ export function BookingFlow() {
                           
                           const looksLikeUrl = value.includes('.');
                           if (looksLikeUrl && !isSafeDomain) {
-                            return "Vui lòng chỉ nhập SĐT hoặc link Facebook/Zalo an toàn.";
+                            return "Vui lòng chỉ nhập SĐT hoặc link Facebook/Zalo/Instagram an toàn.";
                           }
                           return true;
                         }
                       })}
                       disabled={isSubmitting}
                       className="w-full bg-input-background border border-border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                      placeholder="Để lại link Facebook hoặc số Zalo"
+                      placeholder="Để lại link Facebook, Zalo, hoặc Instagram"
                     />
                     {errors.contact && <p className="text-destructive text-sm mt-1">{errors.contact.message}</p>}
                   </div>
@@ -359,7 +359,7 @@ export function BookingFlow() {
               <div className="space-y-2">
                 <h2 className="text-3xl font-serif font-bold text-foreground">Gửi thành công!</h2>
                 <p className="text-muted-foreground">
-                  Cảm ơn bạn đã tin tưởng. Mình sẽ liên hệ lại với bạn trong thời gian sớm nhất qua Facebook/Zalo nhé.
+                  Cảm ơn bạn đã tin tưởng. Mình sẽ liên hệ lại với bạn trong thời gian sớm nhất qua Facebook/Zalo/Instagram nhé.
                 </p>
               </div>
               <button

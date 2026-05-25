@@ -423,7 +423,7 @@ export function AdminDashboard() {
                 </div>
 
                 <div>
-                  <span className="text-xs text-muted-foreground block mb-2">Liên hệ (Facebook/Zalo)</span>
+                  <span className="text-xs text-muted-foreground block mb-2">Liên hệ (FB/Zalo/IG)</span>
                   {getContactInfo(selectedBooking.contactLink).isSafe ? (
                     <a 
                       href={getContactInfo(selectedBooking.contactLink).href}
@@ -446,7 +446,7 @@ export function AdminDashboard() {
                         {getContactInfo(selectedBooking.contactLink).text}
                       </span>
                       <p className="text-xs opacity-70 mt-1">
-                        Đây không phải link Zalo hay Facebook. Không thể click trực tiếp để đảm bảo an toàn. Bạn hãy tự copy nếu muốn xem.
+                        Đây không phải link an toàn (Facebook/Zalo/Instagram). Không thể click trực tiếp để đảm bảo an toàn. Bạn hãy copy thủ công nếu muốn xem.
                       </p>
                     </div>
                   )}
