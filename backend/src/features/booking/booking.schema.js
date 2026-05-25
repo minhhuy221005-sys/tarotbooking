@@ -10,7 +10,25 @@ const bookingSchema = Joi.object({
     'date.format': 'Ngày sinh không hợp lệ.',
     'date.max': 'Ngày sinh không thể ở tương lai.'
   }),
-  contactLink: Joi.string().trim().min(5).max(500).required().messages({
+  contactLink: Joi.string().trim().min(5).max(500).required().custom((value, helpers) => {
+    const nums = value.replace(/[\s\.\-\+]/g, '');
+    if (/^\d{9,12}$/.test(nums)) return value;
+
+    let isSafeDomain = false;
+    try {
+      const urlString = value.startsWith('http') ? value : `https://${value}`;
+      const url = new URL(urlString);
+      isSafeDomain = /(^|\.)(facebook\.com|fb\.com|fb\.me|messenger\.com|m\.me|zalo\.me|instagram\.com)$/i.test(url.hostname);
+    } catch {
+      isSafeDomain = false;
+    }
+    const looksLikeUrl = value.includes('.');
+    
+    if (looksLikeUrl && !isSafeDomain) {
+      return helpers.message('Vui lòng chỉ nhập SĐT hoặc link Facebook/Zalo an toàn. Link lạ đã bị từ chối.');
+    }
+    return value;
+  }).messages({
     'string.empty': 'Thông tin liên hệ là bắt buộc.',
     'string.min': 'Thông tin liên hệ quá ngắn.'
   }),

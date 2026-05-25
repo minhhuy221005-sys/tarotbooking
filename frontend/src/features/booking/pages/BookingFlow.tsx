@@ -286,7 +286,28 @@ export function BookingFlow() {
                       Link Facebook / Zalo
                     </label>
                     <input
-                      {...register("contact", { required: "Vui lòng nhập phương thức liên lạc" })}
+                      {...register("contact", { 
+                        required: "Vui lòng nhập phương thức liên lạc",
+                        validate: (value) => {
+                          const nums = value.replace(/[\s\.\-\+]/g, '');
+                          if (/^\d{9,12}$/.test(nums)) return true; // SĐT hợp lệ
+                          
+                          let isSafeDomain = false;
+                          try {
+                            const urlString = value.startsWith('http') ? value : `https://${value}`;
+                            const url = new URL(urlString);
+                            isSafeDomain = /(^|\.)(facebook\.com|fb\.com|fb\.me|messenger\.com|m\.me|zalo\.me|instagram\.com)$/i.test(url.hostname);
+                          } catch {
+                            isSafeDomain = false;
+                          }
+                          
+                          const looksLikeUrl = value.includes('.');
+                          if (looksLikeUrl && !isSafeDomain) {
+                            return "Vui lòng chỉ nhập SĐT hoặc link Facebook/Zalo an toàn.";
+                          }
+                          return true;
+                        }
+                      })}
                       disabled={isSubmitting}
                       className="w-full bg-input-background border border-border rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                       placeholder="Để lại link Facebook hoặc số Zalo"
