@@ -105,14 +105,17 @@ const getAdminBookings = async () => {
 
   const sheet = doc.sheetsByIndex[0];
   const rows = await sheet.getRows();
+  const updatePromises = [];
 
-  return rows.map((row) => {
+  const bookings = rows.map((row) => {
     let currentStatus = row.get('Trạng thái') || 'Mới';
     const preferredTime = row.get('Thời gian muốn xem');
     
     // Tự động chuyển thành 'Cũ' nếu thời gian đã trôi qua và vẫn đang là 'Mới'
     if (currentStatus === 'Mới' && isPastDue(preferredTime)) {
       currentStatus = 'Cũ';
+      row.set('Trạng thái', 'Cũ'); // Update the row object
+      updatePromises.push(row.save()); // Queue the save operation
     }
 
     return {
@@ -127,6 +130,17 @@ const getAdminBookings = async () => {
       note: row.get('Ghi chú') || ''
     };
   }).reverse(); // Reverse to show newest first
+
+  // Execute all Google Sheet save operations in parallel if any
+  if (updatePromises.length > 0) {
+    try {
+      await Promise.all(updatePromises);
+    } catch (error) {
+      console.error("Failed to auto-update some rows in Google Sheet:", error);
+    }
+  }
+
+  return bookings;
 };
 
 module.exports = { appendBooking, getAdminBookings };
