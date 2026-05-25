@@ -204,7 +204,61 @@ export function AdminDashboard() {
         </div>
 
         <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile Card Layout */}
+          <div className="block md:hidden divide-y divide-border">
+            {filteredBookings.length === 0 ? (
+              <div className="p-6 text-center text-muted-foreground">
+                Không tìm thấy dữ liệu phù hợp.
+              </div>
+            ) : (
+              filteredBookings.map((booking, idx) => (
+                <div key={booking.id || idx} className="p-4 space-y-3">
+                  <div className="flex justify-between items-start gap-2">
+                    <div>
+                      <div className="font-medium text-foreground text-base">{booking.fullName}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">SN: {booking.dob}</div>
+                    </div>
+                    <span className={`shrink-0 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
+                      booking.status === 'Mới' ? 'bg-green-100 text-green-700 border-green-200' :
+                      booking.status === 'Cũ' ? 'bg-orange-100 text-orange-700 border-orange-200' :
+                      booking.status === 'Hủy' ? 'bg-red-100 text-red-700 border-red-200' :
+                      'bg-gray-100 text-gray-700 border-gray-200'
+                    }`}>
+                      {booking.status}
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div>
+                      <span className="text-muted-foreground text-xs block">Gói Tarot</span>
+                      <span className="inline-block mt-0.5 px-2 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary border border-primary/20 truncate max-w-full">
+                        {booking.packageName}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground text-xs block">Thời gian xem</span>
+                      <span className="font-medium">{booking.preferredTime}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm pt-2 border-t border-border/50">
+                    <span className="text-xs text-muted-foreground">{booking.timestamp}</span>
+                    <a 
+                      href={booking.contactLink.startsWith('http') ? booking.contactLink : `https://${booking.contactLink}`}
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline truncate max-w-[120px]"
+                    >
+                      Liên hệ
+                    </a>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Desktop Table Layout */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left text-sm whitespace-nowrap">
               <thead className="bg-muted/50 border-b border-border">
                 <tr>
