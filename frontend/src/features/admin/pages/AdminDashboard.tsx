@@ -15,6 +15,25 @@ type Booking = {
   note: string;
 };
 
+const getContactInfo = (contactLink: string) => {
+  if (!contactLink) return { href: '#', text: 'Chưa có thông tin' };
+  const c = contactLink;
+  const nums = c.replace(/[\s\.\-\+]/g, '');
+  if (/^\d{9,12}$/.test(nums)) {
+    let f = nums;
+    if (f.startsWith('84')) f = f.slice(2);
+    else if (f.startsWith('0')) f = f.slice(1);
+    return {
+      href: `https://zalo.me/84${f}`,
+      text: `+84 ${f}`
+    };
+  }
+  return {
+    href: c.startsWith('http') ? c : `https://${c}`,
+    text: c
+  };
+};
+
 export function AdminDashboard() {
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -276,7 +295,11 @@ export function AdminDashboard() {
                   </tr>
                 ) : (
                   filteredBookings.map((booking, idx) => (
-                    <tr key={booking.id || idx} className="hover:bg-muted/30 transition-colors">
+                    <tr 
+                      key={booking.id || idx} 
+                      onClick={() => setSelectedBooking(booking)}
+                      className="hover:bg-muted/30 transition-colors cursor-pointer"
+                    >
                       <td className="px-6 py-4 text-muted-foreground">{booking.timestamp}</td>
                       <td className="px-6 py-4">
                         <div className="font-medium text-foreground">{booking.fullName}</div>
@@ -290,12 +313,13 @@ export function AdminDashboard() {
                       <td className="px-6 py-4 font-medium">{booking.preferredTime}</td>
                       <td className="px-6 py-4">
                         <a
-                          href={booking.contactLink.startsWith('http') ? booking.contactLink : `https://${booking.contactLink}`}
+                          href={getContactInfo(booking.contactLink).href}
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
                           className="text-blue-500 hover:underline truncate max-w-[150px] inline-block"
                         >
-                          {booking.contactLink}
+                          {getContactInfo(booking.contactLink).text}
                         </a>
                       </td>
                       <td className="px-6 py-4">
@@ -374,35 +398,14 @@ export function AdminDashboard() {
                 <div>
                   <span className="text-xs text-muted-foreground block mb-2">Liên hệ (Facebook/Zalo)</span>
                   <a 
-                    href={(() => {
-                      const c = selectedBooking.contactLink;
-                      const nums = c.replace(/[\s\.\-\+]/g, '');
-                      if (/^\d{9,12}$/.test(nums)) {
-                        let f = nums;
-                        if (f.startsWith('84')) f = f.slice(2);
-                        else if (f.startsWith('0')) f = f.slice(1);
-                        return `https://zalo.me/84${f}`;
-                      }
-                      if (c.startsWith('http')) return c;
-                      return `https://${c}`;
-                    })()}
+                    href={getContactInfo(selectedBooking.contactLink).href}
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 w-full p-3 bg-blue-50/50 hover:bg-blue-50 border border-blue-100 rounded-xl text-blue-600 transition-colors"
                   >
                     <ExternalLink className="w-4 h-4 shrink-0" />
                     <span className="truncate">
-                      {(() => {
-                        const c = selectedBooking.contactLink;
-                        const nums = c.replace(/[\s\.\-\+]/g, '');
-                        if (/^\d{9,12}$/.test(nums)) {
-                          let f = nums;
-                          if (f.startsWith('84')) f = f.slice(2);
-                          else if (f.startsWith('0')) f = f.slice(1);
-                          return `+84 ${f}`;
-                        }
-                        return c;
-                      })()}
+                      {getContactInfo(selectedBooking.contactLink).text}
                     </span>
                   </a>
                 </div>
