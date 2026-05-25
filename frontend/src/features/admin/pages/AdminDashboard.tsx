@@ -215,18 +215,15 @@ export function AdminDashboard() {
               filteredBookings.map((booking, idx) => (
                 <div 
                   key={booking.id || idx} 
-                  className="p-4 flex items-center justify-between cursor-pointer hover:bg-muted/30 transition-colors active:bg-muted/50"
+                  className="p-4 space-y-3 cursor-pointer hover:bg-muted/30 transition-colors active:bg-muted/50"
                   onClick={() => setSelectedBooking(booking)}
                 >
-                  <div className="flex flex-col gap-1">
-                    <span className="font-medium text-foreground text-base">{booking.fullName}</span>
-                    <span className="text-xs text-muted-foreground bg-primary/10 text-primary px-2 py-0.5 rounded-md inline-flex w-fit">
-                      {booking.packageName}
-                    </span>
-                  </div>
-                  
-                  <div className="flex flex-col items-end gap-2">
-                    <span className={`shrink-0 inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase tracking-wider ${
+                  <div className="flex justify-between items-start gap-2">
+                    <div>
+                      <div className="font-medium text-foreground text-base">{booking.fullName}</div>
+                      <div className="text-xs text-muted-foreground mt-0.5">SN: {booking.dob}</div>
+                    </div>
+                    <span className={`shrink-0 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
                       booking.status === 'Mới' ? 'bg-green-100 text-green-700 border-green-200' :
                       booking.status === 'Cũ' ? 'bg-orange-100 text-orange-700 border-orange-200' :
                       booking.status === 'Hủy' ? 'bg-red-100 text-red-700 border-red-200' :
@@ -234,7 +231,23 @@ export function AdminDashboard() {
                     }`}>
                       {booking.status}
                     </span>
-                    <span className="text-[10px] text-muted-foreground">{booking.preferredTime.split(' ')[0]}</span>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div>
+                      <span className="text-muted-foreground text-xs block">Gói Tarot</span>
+                      <span className="inline-block mt-0.5 px-2 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary border border-primary/20 truncate max-w-full">
+                        {booking.packageName}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground text-xs block">Thời gian xem</span>
+                      <span className="font-medium">{booking.preferredTime}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm pt-2 border-t border-border/50">
+                    <span className="text-xs text-muted-foreground">{booking.timestamp}</span>
                   </div>
                 </div>
               ))
@@ -361,13 +374,34 @@ export function AdminDashboard() {
                 <div>
                   <span className="text-xs text-muted-foreground block mb-2">Liên hệ (Facebook/Zalo)</span>
                   <a 
-                    href={selectedBooking.contactLink.startsWith('http') ? selectedBooking.contactLink : `https://${selectedBooking.contactLink}`}
+                    href={(() => {
+                      const c = selectedBooking.contactLink;
+                      const nums = c.replace(/[\s\.\-\+]/g, '');
+                      if (/^\d{9,12}$/.test(nums)) {
+                        let f = nums;
+                        if (f.startsWith('0')) f = '84' + f.slice(1);
+                        return `https://zalo.me/${f}`;
+                      }
+                      if (c.startsWith('http')) return c;
+                      return `https://${c}`;
+                    })()}
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 w-full p-3 bg-blue-50/50 hover:bg-blue-50 border border-blue-100 rounded-xl text-blue-600 transition-colors"
                   >
-                    <ExternalLink className="w-4 h-4" />
-                    <span className="truncate">{selectedBooking.contactLink}</span>
+                    <ExternalLink className="w-4 h-4 shrink-0" />
+                    <span className="truncate">
+                      {(() => {
+                        const c = selectedBooking.contactLink;
+                        const nums = c.replace(/[\s\.\-\+]/g, '');
+                        if (/^\d{9,12}$/.test(nums)) {
+                          let f = nums;
+                          if (f.startsWith('0')) return '+84' + f.slice(1);
+                          return f;
+                        }
+                        return c;
+                      })()}
+                    </span>
                   </a>
                 </div>
 
