@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Lock, Search, Filter, LogOut, MoonStar, Table, RefreshCcw, X, ExternalLink } from 'lucide-react';
+import { Lock, Search, Filter, LogOut, MoonStar, Table, RefreshCcw, X, ExternalLink, ShieldAlert } from 'lucide-react';
 import { toast } from 'sonner';
 
 type Booking = {
@@ -16,7 +16,7 @@ type Booking = {
 };
 
 const getContactInfo = (contactLink: string) => {
-  if (!contactLink) return { href: '#', text: 'Chưa có thông tin' };
+  if (!contactLink) return { href: '#', text: 'Chưa có thông tin', isSafe: true };
   const c = contactLink;
   const nums = c.replace(/[\s\.\-\+]/g, '');
   if (/^\d{9,12}$/.test(nums)) {
@@ -25,12 +25,19 @@ const getContactInfo = (contactLink: string) => {
     else if (f.startsWith('0')) f = f.slice(1);
     return {
       href: `https://zalo.me/84${f}`,
-      text: `+84 ${f}`
+      text: `+84 ${f}`,
+      isSafe: true
     };
   }
+  
+  const isSafeDomain = /(facebook\.com|fb\.com|m\.me|zalo\.me|instagram\.com)/i.test(c);
+  const looksLikeUrl = c.includes('.');
+  const isSafe = !looksLikeUrl || isSafeDomain;
+  
   return {
-    href: c.startsWith('http') ? c : `https://${c}`,
-    text: c
+    href: isSafe ? (c.startsWith('http') ? c : `https://${c}`) : '#',
+    text: c,
+    isSafe: isSafe
   };
 };
 
@@ -312,15 +319,26 @@ export function AdminDashboard() {
                       </td>
                       <td className="px-6 py-4 font-medium">{booking.preferredTime}</td>
                       <td className="px-6 py-4">
-                        <a
-                          href={getContactInfo(booking.contactLink).href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="text-blue-500 hover:underline truncate max-w-[150px] inline-block"
-                        >
-                          {getContactInfo(booking.contactLink).text}
-                        </a>
+                        {getContactInfo(booking.contactLink).isSafe ? (
+                          <a
+                            href={getContactInfo(booking.contactLink).href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-blue-500 hover:underline truncate max-w-[150px] inline-flex items-center gap-1"
+                          >
+                            {getContactInfo(booking.contactLink).text}
+                          </a>
+                        ) : (
+                          <span 
+                            className="text-amber-600 flex items-center gap-1 truncate max-w-[150px] cursor-not-allowed"
+                            title="Link lạ, cẩn thận lừa đảo"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <ShieldAlert className="w-3 h-3 shrink-0" />
+                            {getContactInfo(booking.contactLink).text}
+                          </span>
+                        )}
                       </td>
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${booking.status === 'Mới' ? 'bg-green-100 text-green-700 border-green-200' :
@@ -397,17 +415,32 @@ export function AdminDashboard() {
 
                 <div>
                   <span className="text-xs text-muted-foreground block mb-2">Liên hệ (Facebook/Zalo)</span>
-                  <a 
-                    href={getContactInfo(selectedBooking.contactLink).href}
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 w-full p-3 bg-blue-50/50 hover:bg-blue-50 border border-blue-100 rounded-xl text-blue-600 transition-colors"
-                  >
-                    <ExternalLink className="w-4 h-4 shrink-0" />
-                    <span className="truncate">
-                      {getContactInfo(selectedBooking.contactLink).text}
-                    </span>
-                  </a>
+                  {getContactInfo(selectedBooking.contactLink).isSafe ? (
+                    <a 
+                      href={getContactInfo(selectedBooking.contactLink).href}
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 w-full p-3 bg-blue-50/50 hover:bg-blue-50 border border-blue-100 rounded-xl text-blue-600 transition-colors"
+                    >
+                      <ExternalLink className="w-4 h-4 shrink-0" />
+                      <span className="truncate">
+                        {getContactInfo(selectedBooking.contactLink).text}
+                      </span>
+                    </a>
+                  ) : (
+                    <div className="flex flex-col gap-2 w-full p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-700">
+                      <div className="flex items-center gap-2 font-medium">
+                        <ShieldAlert className="w-4 h-4 shrink-0" />
+                        <span>Cảnh báo Link lạ (Phishing)</span>
+                      </div>
+                      <span className="truncate text-sm opacity-80 select-all">
+                        {getContactInfo(selectedBooking.contactLink).text}
+                      </span>
+                      <p className="text-xs opacity-70 mt-1">
+                        Đây không phải link Zalo hay Facebook. Không thể click trực tiếp để đảm bảo an toàn. Bạn hãy tự copy nếu muốn xem.
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {selectedBooking.note && (
