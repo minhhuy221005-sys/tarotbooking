@@ -60,6 +60,22 @@ const formatPreferredTimeForSheet = (value) => {
   }
 };
 
+const isPastDue = (timeStr) => {
+  if (!timeStr) return false;
+  try {
+    // timeStr format: "HH:mm DD/MM/YYYY"
+    const [time, date] = timeStr.split(' ');
+    if (!time || !date) return false;
+    const [hh, mm] = time.split(':');
+    const [dd, mo, yyyy] = date.split('/');
+    // Build ISO string in local time then assume it's VN time
+    const bookingDate = new Date(`${yyyy}-${mo}-${dd}T${hh}:${mm}:00+07:00`);
+    return bookingDate < new Date();
+  } catch {
+    return false;
+  }
+};
+
 const appendBooking = async (data) => {
   const auth = getAuthToken();
   if (!auth) throw new Error('Google Sheets Auth failed');
@@ -90,17 +106,27 @@ const getAdminBookings = async () => {
   const sheet = doc.sheetsByIndex[0];
   const rows = await sheet.getRows();
 
-  return rows.map((row) => ({
-    id: row.rowNumber, // Google Sheets row number as unique ID
-    timestamp: row.get('Thời gian gửi'),
-    packageName: row.get('Gói Tarot'),
-    fullName: row.get('Họ và tên'),
-    dob: row.get('Ngày sinh'),
-    contactLink: row.get('Link Facebook'),
-    preferredTime: row.get('Thời gian muốn xem'),
-    status: row.get('Trạng thái') || 'Mới',
-    note: row.get('Ghi chú') || ''
-  })).reverse(); // Reverse to show newest first
+  return rows.map((row) => {
+    let currentStatus = row.get('Trạng thái') || 'Mới';
+    const preferredTime = row.get('Thời gian muốn xem');
+    
+    // Tự động chuyển thành 'Cũ' nếu thời gian đã trôi qua và vẫn đang là 'Mới'
+    if (currentStatus === 'Mới' && isPastDue(preferredTime)) {
+      currentStatus = 'Cũ';
+    }
+
+    return {
+      id: row.rowNumber,
+      timestamp: row.get('Thời gian gửi'),
+      packageName: row.get('Gói Tarot'),
+      fullName: row.get('Họ và tên'),
+      dob: row.get('Ngày sinh'),
+      contactLink: row.get('Link Facebook'),
+      preferredTime,
+      status: currentStatus,
+      note: row.get('Ghi chú') || ''
+    };
+  }).reverse(); // Reverse to show newest first
 };
 
 module.exports = { appendBooking, getAdminBookings };

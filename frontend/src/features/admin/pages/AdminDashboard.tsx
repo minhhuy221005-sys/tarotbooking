@@ -186,6 +186,7 @@ export function AdminDashboard() {
               >
                 <option value="All">Tất cả trạng thái</option>
                 <option value="Mới">Mới</option>
+                <option value="Cũ">Cũ</option>
                 <option value="Đã liên hệ">Đã liên hệ</option>
                 <option value="Đã hoàn thành">Đã hoàn thành</option>
                 <option value="Hủy">Hủy</option>
@@ -249,6 +250,7 @@ export function AdminDashboard() {
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
                           booking.status === 'Mới' ? 'bg-green-100 text-green-700 border-green-200' :
+                          booking.status === 'Cũ' ? 'bg-orange-100 text-orange-700 border-orange-200' :
                           booking.status === 'Hủy' ? 'bg-red-100 text-red-700 border-red-200' :
                           'bg-gray-100 text-gray-700 border-gray-200'
                         }`}>
