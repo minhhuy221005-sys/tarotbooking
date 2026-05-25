@@ -30,7 +30,16 @@ const getContactInfo = (contactLink: string) => {
     };
   }
   
-  const isSafeDomain = /(facebook\.com|fb\.com|m\.me|zalo\.me|instagram\.com)/i.test(c);
+  let isSafeDomain = false;
+  try {
+    const urlString = c.startsWith('http') ? c : `https://${c}`;
+    const url = new URL(urlString);
+    // Phải kết thúc bằng domain chuẩn (ngăn chặn: facebook.com.hacker.com hoặc hacker.com/facebook.com)
+    isSafeDomain = /(^|\.)(facebook\.com|fb\.com|m\.me|zalo\.me|instagram\.com)$/i.test(url.hostname);
+  } catch {
+    isSafeDomain = false; // Invalid URL structure
+  }
+  
   const looksLikeUrl = c.includes('.');
   const isSafe = !looksLikeUrl || isSafeDomain;
   
