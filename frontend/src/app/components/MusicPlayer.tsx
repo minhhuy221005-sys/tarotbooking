@@ -16,25 +16,34 @@ export function MusicPlayer() {
 
   const currentSong = playlist[currentSongIndex];
 
-  // Tự động phát khi khách bấm vào màn hình lần đầu
+  // Tự động phát khi khách bấm vào màn hình lần đầu (hoặc ngay lập tức nếu trình duyệt cho phép)
   useEffect(() => {
-    const handleInteraction = () => {
+    const tryPlay = () => {
       if (!hasInteracted && audioRef.current) {
         audioRef.current.play().then(() => {
           setIsPlaying(true);
           setHasInteracted(true);
-        }).catch(err => console.log("Trình duyệt chặn autoplay:", err));
+        }).catch(err => console.log("Trình duyệt chặn autoplay, đang chờ tương tác:", err));
       }
+    };
+
+    // Thử phát ngay lập tức khi vừa vào web
+    tryPlay();
+
+    const handleInteraction = () => {
+      tryPlay();
     };
 
     document.addEventListener('click', handleInteraction, { once: true });
     document.addEventListener('touchstart', handleInteraction, { once: true });
     document.addEventListener('scroll', handleInteraction, { once: true });
+    document.addEventListener('mousemove', handleInteraction, { once: true });
 
     return () => {
       document.removeEventListener('click', handleInteraction);
       document.removeEventListener('touchstart', handleInteraction);
       document.removeEventListener('scroll', handleInteraction);
+      document.removeEventListener('mousemove', handleInteraction);
     };
   }, [hasInteracted]);
 
