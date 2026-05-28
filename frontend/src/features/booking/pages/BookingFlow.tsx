@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
 import { ImageWithFallback } from '../../../app/components/figma/ImageWithFallback';
+import { MusicPlayer } from '../../../app/components/MusicPlayer';
 import mascotImage from '../assets/facebook-mascot.png';
 
 type FormData = {
@@ -91,6 +92,8 @@ export function BookingFlow() {
       <div 
         className="fixed inset-0 pointer-events-none opacity-5 bg-[url('https://images.unsplash.com/photo-1740375699688-1a9d64e92adf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdW4lMjB0YXJvdCUyMGNhcmRzJTIwbGlnaHQlMjB3YXJtfGVufDF8fHx8MTc3ODE0ODg4NXww&ixlib=rb-4.1.0&q=80&w=1080')] bg-cover bg-center mix-blend-multiply" 
       />
+      
+      <MusicPlayer />
       
       {/* Header */}
       <header className="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
